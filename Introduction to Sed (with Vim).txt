@@ -1,0 +1,103 @@
+====================================
+|| Introduction to Sed (with Vim) ||
+====================================
+# Basic Search and Replace (:s)
+:s/what-to-search/what-to-replace-with/scope(optional)
+
+:s/t/T                              # replaces 't' with 'T' (in the current line); stops after first replacement
+:s/t/T/g                            # replaces 't' with 'T' (every occurances in the current line)
+:%s/t/T                             # replaces 't' with 'T' in the whole document but stops after first occurance for each line
+:%s/t/T/g                           # replaces all the occurances of 't' with 'T' in the whole document
+
+:s/foo/bar                          # as expected: replaces "foo" with "bar" on the first occurance in the current line
+:%s/foo/bar/gc                      # replaces "foo" with "bar" and asks for confirmation first
+:%s/foo/bar/gci                     # case insensitive
+:%s/foo/bar/gcI                     # case sensitive
+:%s/foo\c/bar/gc                    # case insensitive (same as adding i option)
+
+:%s/\<foo\>/bar/g                   # change only if the whole word matches
+
+:5,12s/foo/bar/g                    # change each 'foo' to 'bar' for all lines from line 5 to line 12 (inclusive)
+
+:'<,'>s/foo/bar/g                   # in "visual" mode Vim automatically appends the visual selection range ('<,'>) for any following command
+
+:.,$s/foo/bar/g                     # for all lines from the current line (.) to the last line ($) inclusive change each 'foo' to 'bar'
+:.,+2s/foo/bar/g                    # for the current line (.) and the two next lines (+2) change each 'foo' to 'bar'
+:g/^baz/s/foo/bar/g                 # in each line starting with 'baz' change each 'foo' to 'bar'
+
+
+^E                                  # scroll the screen up
+^Y                                  # scroll the screen down
+
+-----------------
+| More Examples |
+-----------------
+\zs                                 # start of search pattern
+\ze                                 # end   of search pattern
+:%s/.*\zsfoo/bar/                   # on each line, replace the last occurrence of "foo" with "bar"
+:%s/.*\<foo\>//                     # on each line, delete the whole word "foo" and all preceding text (from beginning of line)
+:%s/\<foo\>.*//                     # on each line, delete the whole word "foo" and all following text (to end of line)
+:%s/\<foo\>\zs.*//                  # on each line, delete all text following the whole word "foo" (to end of line)
+:%s/.*\ze\<foo\>//                  # on each line, delete all the text preceding the whole word "foo" (from beginning of line)
+
+:%s/.*\(\<foo\>\).*/\1/             # On each line, delete all the text preceding and following the whole word "foo".
+
+====================
+|| When Searching ||
+====================
+., *, \, [, ^, and $ are metacharacters.
++, ?, |, &, {, (, and ) must be escaped to use their special function
+\/ is / (use backslash + forward slash to search for forward slash)
+\t is tab, \s is whitespace
+\n is newline, \r is CR (carriage return = Ctrl-M = ^M)
+
+After an opening [, everything until the next closing ] specifies a /collection. Character ranges can be represented with a -; for example a letter a, b, c, or the number 1 can be matched with [1a-c].
+Negate the collection with [^ instead of [; for example [^1a-c] matches any character except a, b, c, or 1.
+
+\{#\} is used for repetition. /foo.\{2\} will match foo and the two following characters. The \ is not required on the closing } so /foo.\{2} will do the same.
+
+\(foo\) makes a backreference to foo. Parenthesis without escapes are literally matched. Here the \ is required for the closing \).
+
+
+====================
+|| When Replacing ||
+====================
+\r is newline, \n is a null byte (0x00).
+\& is ampersand (& is the text that matches the search pattern).
+\0 inserts the text matched by the entire pattern
+\1 inserts the text of the first backreference. \2 inserts the second backreference, and so on.
+
+Save typing by using \zs and \ze to set the start and end of a pattern. For example, instead of:
+:s/Copyright 2007 All Rights Reserved/Copyright 2008 All Rights Reserved/
+Use:
+:s/Copyright \zs2007\ze All Rights Reserved/2008/
+
+:%s//bar/g                          # replace each match of the last search pattern with 'bar'
+
+========================
+|| Range of Operation ||
+========================
+Specifier           Description
+number              an absolute line number
+.                   the current line
+$                   the last line in the file
+%                   the whole file. The same as 1,$
+'t                  position of mark "t"
+/pattern[/]         the next line where text "pattern" matches.
+?pattern[?]         the previous line where text "pattern" matches
+\/                  the next line where the previously used search pattern matches
+\?                  the previous line where the previously used search pattern matches
+\&                  the next line where the previously used substitute pattern matches
+
+
+==================
+|| Vim Settings ||
+==================
+:set noignorecase                   # make searches case sensitive (which is the default settings)
+:set hlsearch                       # vim will highlights the matches of the searched text
+
+
+==========
+|| Help ||
+==========
+http://vimregex.com/

@@ -1,0 +1,269 @@
+===========================
+|| Intorduction to Linux ||
+===========================
+
+# There are 3 popular Linux Distributions
+    - Debian based systems  : Ubuntu
+    - SUSE based systems    : openSUSE
+    - Fedora based systems  : CentOS / Red Hat
+
+    - RPM based systems     :
+
+# Linux systems
+    - Server
+        - openSUSE
+        - CentOS / Red Hat Enterprise Linux
+        - Ubuntu Server
+    - Desktop
+        - Ubuntu Desktop
+        - Fedora
+    - Embedded
+        - Android
+        - Tizen
+
+# Package Managers : Two types
+    - Debian
+        - Debian - apt-get
+    - RPM
+        - SUSE   - zypper
+        - Fedora - yum
+
+====================
+|| Basic Commands ||
+====================
+$ shutdown now                              # To shutdown your pc
+$ sudo shutdown now                         # If "sudo" is not enabled, then just press "su <ENTER>",
+                                            # then type root password.
+                                            # It should create "/etc/sudoers.d/<USER>" file and thus enable "sudo"
+                                            # Off-course don't forget to "chmod 440 /etc/sudoers.d/<USER>"
+$ sudo shutdown -r                          # Reboot
+$ sudo shutdown -s                          # Sleep
+
+$ ssh username@remote-server.com            # Connect to remote systems
+
+$ which diff                                # Locate programs. Here trying to locate "diff" program
+$ whereis diff                              # Same as "which"
+
+$ pwd                                       # Displays the present working directory
+
+$ cd //usr//bin = cd /usr/bin               # ////usr//bin is valid, but seen as /usr/bin by the system.
+                                            # Multiple slashes (/) between directories and files are allowed,
+                                            # but all but one is ignored
+====================
+---- List files ----
+====================
+$ ls -a                                     # List all files including hidden files
+$ tree                                      # Displays a tree view of the filesystem
+$ tree -d /                                 # Displays a tree view from the root
+
+$ dirs                                      # Shows your pushed directories (pushd <directory>)
+
+$ ls -li                                    # The -i option to "ls" prints out the "inode" number (1st column)
+                                            # which is a unique quantity for each file object. (helpful to detect hard/soft link)
+-- Hard Link: Multiple physical files pointing to each other. Changes in any of the files is reflected to other files.
+-- Soft Link: Works as Pointer in c++. Doesn't take much space or no space, and yet creates link between files.
+              Unlike hard links, soft links can point to objects even on different filesystems (or partitions) which may or may not be currently available or even exist. In the case where the link does not point to a currently available or existing object, you obtain a dangling link.
+
+====================
+--- Write output ---
+====================
+-- constant file description numbers
+   stdin : 0
+   stdout: 1
+   stderr: 2
+
+$ do_something < input-file                 # program "do_something" takes an input-file
+$ do_something > output-file                # program "do_something" writes stdout into output-file
+$ do_something 2> output-err-file           # program "do_something" writes stderr into output-err-file
+$ do_something > all-output-file 2>&1       # program "do_something" writes stdout and stderr to all-output-file
+$ do_something >& all-output-file           # same as above
+
+====================
+---- Find file -----
+====================
+locate <file-name>                          # find file (wildcard allowed)
+                                            # wildcards e.g.
+                                            - ?      : any single character
+                                            - *      : any string of characters
+                                            - [set]  : any char from the set :
+                                                       [adf] match any occurance of 'a', 'd' or 'f'
+                                                       [a-z] a single lower case alphabet
+                                                       [A-Z] a single upper case alphabet
+                                                       [0-9] any single number
+                                            - [!set] : any char but from the set
+
+ls file?.txt                                # lists file name contains "file" followed by a char & ends with ".txt"
+ls *.txt
+
+find <location> <options> <name>            # find the name, from location, with specified option
+                                            # When location and option are absent, lists all files from the
+                                            # current directory and all of its subdirectories
+find . -name file[0-9].txt
+find file[0-9].txt
+
+find /usr -type d -name gcc                 # find only directories named "gcc"
+find /usr -type f -name test1               # find only files named "test1"
+find /usr -type l -name test1               # find links with name "test1"
+
+$ find -name "*.txt" -exec rm {} ’;’        # find names and execute "rm" command on them
+                                            # remember to end with single quoted semicolon (';') or \;
+
+$ find / -size +10M                         # find file bigger than 10MB
+$ find / -ctime 3                           # find file created 3 days ago
+                                            # n is days,
+                                            # it can also be "+n" or "-n" which means greater or less than days
+====================
+--- File Viewing ---
+====================
+$ cat <file-name>                           # view files that are not very long. no scrolling available
+$ tac <file-name>                           # view file backword (reverse of cat)
+
+$ less <file-name>                          # view larger files. searching with '/' or '?' available.
+
+$ tail <file-name>                          # view last 10 lines (use -15 to see 15 lines and so on)
+$ head <file-name>                          # opposite of tail
+
+=========================
+--- Text manipulating ---
+=========================
+$ cat file-name                             # view file
+$ cat file_1 file_2                         # concatenate file_1 and file_2 and display
+$ cat file_1 file_2 > file_3                # concatenate file_1 and file_2 and write to file_3
+$ cat file_1 >> file_4                      # append file_1 to the end of file_4
+$ cat > file_1                              # write whatever comes later to file_1 until ctrl+d pressed
+$ cat >> file_1                             # append whatever comes later to file_1 untill ctrl+d pressed
+
+$ tac file_1 file_2                         # concatenate two files in line reverse order
+$ tac file_1 >> file_2                      # append file1 (line reverse order) to the end of file_2
+
+$ echo string > file_1                      # write "string" to file_1
+$ echo string >> file_1                     # appened "string" to file_1
+
+----- --- - --- -----
+$ sed s/pattern/replace_string/ file        # replace first string occurrence of "pattern" with "replace_string"
+$ sed s/pattern/replace_string/g file       # replace all string occurrence of "pattern" with "replace_string"
+$ sed 1,5s/pattern/replace_str/g file       # replace strings in line 1 to 5
+
+$ sed s/pattern/replace_string/g file1 > file2  # replace string and save the output in another file
+
+
+$ awk '{print $0}' file1.txt                # print the whole file
+$ awk '{print $1}' file1.txt                # print only the 1st column of the file
+$ awk '{print $2}' file1.txt                # print only the 2nd column of the file
+$ awk '{print $1 $2}' file1.txt             # print 1st and 2nd column of the file without any seperator
+$ awk F: '{print $1 $2}' file1.txt          # print 1st and 2nd column with a space in between
+
+=========================
+--- File manipulating ---
+=========================
+$ sort <filename>                           # sort content of the file
+$ cat file1 file2 | sort                    # concatenate files and sort their contents
+$ sort -r <filename>                        # sort reverse order
+$ sort -u <filename>                        # sort and check unique contents
+
+$ sort file1 file2 | uniq > file3           # same as "sort -u file1 file2 > file3"
+$ uniq -c <filename>                        # count the number of duplicate entries
+
+$ paste                                     # concatenate file's columns
+
+$ join                                      # concatenate file's columns and also consider similar columns
+
+$ split                                     # split up a file into equal-sized segments for easier manipulation
+$ split big-file splitted-file-X            # splitted file names will look like splitted-file-XX
+
+==========================
+------ grep command ------
+==========================
+$ grep [pattern] <filename>                 # show lines that matches the pattern
+$ grep -v [pattern] <filename>              # show lines that doesn't matches the pattern
+
+$ grep [0-9] <filename>                     # show lines that contains numbers
+
+$ grep -C 3 [pattern] <filename>            # show 3 lines of context above and below of the matching pattern
+
+==========================
+--- Regular Expression ---
+==========================
+.                                           # match a single character
+a|z                                         # match 'a' or 'z'
+$                                           # match end of line
+*                                           # 0 or more times of occurance of preceding item
+
+.*                                          # 0 or more times of occurance of '.' which means any character
+
+a..                                         # 'a' followed by two character
+b.|j.                                       # 'b' or 'j' followed by a single character
+..$                                         # two characters at the end of line
+l.*                                         # 'l' and anything
+l.*y                                        # anything can be in between 'l' and 'y'
+
+==========================
+---- Translate chars -----
+==========================
+$ tr '{}' '()' < inputfile > outputfile                 # transform braces into parenthesis
+$ echo "This is for testing" | tr [:space:] '\t'        # spaces into tab
+$ echo "This   is   for    testing" | tr -s [:space:]   # squeeze repetition of characters using -s
+$ echo "the geek stuff" | tr -d 't'                     # remove specified characters using -d option
+$ echo "my username is 432234" | tr -cd [:digit:]       # get the digit
+$ tr -s '\n' ' ' < file.txt                             # join all the lines in a file into a single line
+
+
+
+===============================
+|| Linux directory structure ||
+===============================
+/bin        : contains the essential user binaries (common linux commands and utilities) that must be present when the system is mounted.
+              placing these files in the /bin directory ensures the system will have these important utilities even if no other file systems are mounted.
+/usr/bin    : user applications are stored here (e.g. Firefox, at, awk, cc, less, scp).
+
+/sbin       : contains system administration binaries for system maintenance (e.g. iptables, reboot, fdisk, ifconfig).
+/usr/sbin   : binary files for system administrators
+
+/boot       : contains the files needed to boot the system (e.g. GRUB boot loader's files and Linux kernels)
+              boot loader’s configuration files aren’t located here, though - they are in /etc, with other configuration files
+/etc        : contains configuration files (including boot loader's config files as well as other config files).
+              these configurations can generally be edited by hand as text.
+              Note that the /etc/ directory contains system-wide configuration files. and user-specific configuration files are located in each user’s home directory.
+
+/cdrom      : this directory isn’t part of the FHS standard, but you’ll still find it on Ubuntu and other operating systems.
+              it’s a temporary location for CD-ROMs inserted in the system.
+/media      : standard location for temporary media
+
+/dev        : (linux exposes devices as files)
+              contains a number of special files that represent devices.
+              these are not actual files as we know them, for example /dev/sda represents the first SATA drive in the system.
+              this directory also contains pseudo-devices, which are virtual devices that don’t actually correspond to hardware.
+              for example /dev/random produces random numbers. /dev/null is a special device that produces no output and automatically discards all input
+              (others like: /dev/tty1, /dev/usbmon0)
+/dev/sda    : represents the first SATA drive in the system
+
+/proc       : contains information about system process.
+              e.g. /proc/{pid} directory contains information about the process with that particular pid.
+
+/home       : home directories for all users (/home/john, /home/nikita)
+
+/lib        : contains library files that supports the binaries located under /bin and /sbin (filenames are either ld* or lib*.so.*)
+
+/opt        : optional add-on applications
+
+/mnt        : temporary mount directory for system admin
+
+/tmp        : temporary files location created by system and users (this directory is emptied at reboot time)
+
+/srv        : service data
+
+/usr/       : user programs
+    /bin/       : user applications are stored here (e.g. Firefox, at, awk, cc, less, scp).
+    /sbin/      : binary files for system administrators
+    /local/     : contains users programs that you install from source
+    /lib/       : contains libraries for /usr/bin and /usr/sbin
+
+/var/       : variable files (content of the files that are expected to grow)
+    /cache/     :
+    /log/       : system log files
+    /lib/       : packages and database files
+    /mail/      : emails
+    /spool/     : print queues
+    /tmp/       :
+
+=========================

@@ -1,0 +1,207 @@
+====================================================================|
+                    || Quick Referance ||
+====================================================================|
+:help <LETTER>                  # help for particular letter
+====================================================================|
+
+====================================================================|
+------------------------------ Basic 1 -----------------------------
+--------------------------------------------------------------------
+i                               # insert mode
+Esc                             # normal mode
+R                               # replace mode (type over existing characters)
+
+w                               # move along words
+b                               # move backword along words
+e                               # move along the end of words
+
+$                               # move to end of line
+^                               # soft move to first of line
+0                               # hard move to first of line
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - |
+x                               # delete
+X                               # backspace
+
+A                               # append (at the end of the current line)
+I                               # insert in the beginning of line
+
+u                               # undo
+ctrl+r                          # redo
+
+R                               # replace mode (type over existing characters)
+====================================================================|
+------------------------------ Basic 2 -----------------------------
+--------------------------------------------------------------------
+f <letter>                      # find next appearance of the <letter> (and move cursor)
+F <letter>                      # find previous appearance of the <letter> (and move cursor)
+
+d <motion>                      # delete (from cursor untill motion's destination)
+                                # <motion>: [w, f <letter>, $, ...]
+d2w                             # delete 2 words (starting from cursor position)
+dd                              # delete line
+d$                              # delete untill the end of line from current cursor position
+
+d5d                             # delete 5 lines from current cursor position
+5dd                             # same as d5d
+
+:5d                             # delete line number 5
+:3,6d                           # delete lines from 3 to 6
+
+c <motion>                      # change (same as delete, but leaves you in insert mode)
+cl                              # change letter and goes to insert mode
+cw                              # change word (starting from cursor position)
+ci{                             # change in {}
+ci(                             # change in ()
+cc                              # change the whole line (delete the line and put cursor at the beginning)
+c$                              # change till the end of line from current cursor position
+
+r <letter>                      # replace current character (close to "cl")
+
+v                               # visual mode
+                                # move around with motions. the text will be highlighted. execute any operation.
+V                               # visual-line mode (visual mode per line)
+ctrl+v                          # rectangular-visual mode
+
+.                               # repeat last operation
+====================================================================|
+---------------------------- Copy Paste ----------------------------
+--------------------------------------------------------------------
+y <motion>                      # yank (copy)
+yy                              # yank line
+
+p                               # paste (if charwise: to the right of cursor, if linewise: below)
+P                               # paste before
+
+> Text deleted with "d", "c", "x" is also copied
+
+o                               # enters insert mode in a new empty line below current one
+O                               # enters insert mode in a new empty line above current one
+====================================================================|
+------------------------------ Search ------------------------------
+--------------------------------------------------------------------
+/ <search text> <press enter>   # search
+? <search text> <press enter>   # search backwards
+n                               # repeat last search forward direction
+N                               # repeat last search backwards
+
+*                               # search for word currently under cursor
+
+> NOTE # <search text> is interpreted as regular expression.
+> which means:
+> a*b   = any number of 'a', followed by 'b'
+> a.*b  = 'a' is followed by a 'b', and anything can be in between
+> ^abc  = "abc" at the beginning of the line
+> [0-9] = looks for the next digit
+====================================================================|
+-------- Insert text at the beginning of multiline selection -------
+--------------------------------------------------------------------
+ctrl + v                        # step-1: enter visual block mode
+up / down                       # step-2: select the range you want to add text to
+shift + i                       # step-3: insert text
+esc                             # step-4: wait a second and the inserted text will appear
+
+====================================================================|
+------------------------------ Marking -----------------------------
+--------------------------------------------------------------------
+m <a-z>                         # set a marker
+m <A-Z>                         # set a global marker
+' <a-z>                         # goto the mark
+====================================================================|
+------------------------------ Motions -----------------------------
+--------------------------------------------------------------------
+%                               # jump between matching pair of '()', '{}', '[]' etc
+
+H                               # jump directly to the top of the screen
+M                               # jump directly to the middle of the screen
+L                               # jump directly to the bottom of the screen
+
+gg                              # jump to the beginning of the file
+G                               # jump to the end of the file
+G$                              # jump to the end of line of the last line
+
+42G                             # goto line 42
+42gg                            # goto line 42
+:42<CR>                         # goto line 42
+
++/-                             # jump to the next or previous line
+
+(/)                             # jump to the beginning or end of the current sentence
+{/}                             # jump to the previous or next empty line
+[[                              # jump to the previous '{' in column 0
+]]                              # jump to the next '{' in column 0
+
+K                               # open help for the word under cursor
+====================================================================|
+------------------------------ Commands ----------------------------
+--------------------------------------------------------------------
+~                               # toggle the case of the letter under the cursor
+
+J                               # joins current line with next one. or joins all the lines under visual selection
+
+r <letter>                      # replace current character
+
+C                               # change untill the end of line (short for "c$")
+
+D                               # delete untill the end of line (short for "d$")
+
+Y                               # copy whole line (short for "yy")
+
+s                               # deletes current character and enters insert mode
+
+S                               # clear current line and enters insert mode (as 'C' at the first char of the line)
+
+>>                              # indent current line
+<<                              # unindent current line
+> [number] >                    # indent number of lines
+< [number] <                    # unindent number of lines
+====================================================================|
+------------------------------- Extra ------------------------------
+--------------------------------------------------------------------
+ZZ                              # save and exit
+ZQ                              # exit without saving
+
+zt                              # scroll cursor to the top of the file      # DOESN'T WORK
+zb                              # scroll cursor to the bottom of the file   # DOESN'T WORK
+zz                              # scroll cursor to the middle of the file   # DOESN'T WORK
+
+:%s/x/y/g  # replace 'x' with 'y' filewide
+====================================================================|
+------------------------------- Extra ------------------------------
+--------------------------------------------------------------------
+ctrl-n (insert mode)            # word auto completion. similar word in current file
+
+command | vim -                 # pipe any linux command output into vim
+find . | vim -
+ls | vim -
+====================================================================|
+------------------------------- Window -----------------------------
+--------------------------------------------------------------------
+:split                          # split window horizontally; both windows will have the same file opened
+:sp                             # same as "split"
+:vsplit                         # split window vertically;   both windows will have the same file opened
+:vsp                            # same as "vsplit"
+:split <file>                   # split  with the new file in new window
+:vsplit <file>                  # vsplit with the new file in new window
+
+:e <file-name>                  # open file in the current window
+
+ctrl-w <arrow-key>              # move cursor to that window
+ctrl-w ctrl-w                   # move cursor to another window (cycle)
+ctrl-w_                         # maximize current window
+ctrl-w=                         # make all windows equal size
+10 ctrl-w+                      # increase window size by 10 lines
+
+:hide                           # close current window
+:only                           # keep only this window open
+
+:ls                             # show current buffer of opened files
+:b 2                            # open buffer #2 in this window
+
+:q                              # quite current window
+====================================================================|
+
+Help:   http://www.viemu.com/a_vi_vim_graphical_cheat_sheet_tutorial.html
+Help:   http://vim.wikia.com/wiki/Search_and_replace
+Help:   http://vimregex.com/
+
+====================================================================|

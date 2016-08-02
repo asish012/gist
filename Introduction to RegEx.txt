@@ -1,0 +1,53 @@
+====================
+---  ---
+====================
+.                                           # any single character
+\.                                          # period
+
+*                                           # zero or more repetition of previous command/char
+.*                                          # any number of repeation of any character
+
++                                           # one or more repetition of previous command/char
+
+\w                                          # any alphanumeric character
+\W                                          # anything but alphanumeric character
+
+\d                                          # any single digit
+\D                                          # any single non digit
+
+?                                           # optional character (applies on previous command/char)
+s?                                          # apple | apples
+
+\?                                          # \ is the skip character
+
+[abc]                                       # match any of these characters 'a' or 'b' or 'c'
+[cmf]an                                     # matches: can | man | fan
+
+[^abc]                                      # not 'a' or 'b' or 'c'
+[^drp]an                                    # do not include: dan | ran | pan
+
+[A-Z][a-z]*                                 # any Pascal case word
+
+{m}                                         # m repetition of previous command/char
+{m,n}                                       # m to n repetition of previous command/char
+waz{1,4}up                                  # wazup | wazzup | wazzzup | wazzzzup
+
+\s                                          # any whitespace character
+\S                                          # any non whitespace character
+
+\d.\s+abc                                   # 1. abc | 2.  abc | 3.    abc
+                                            # NOT: 4.abc
+
+successful$                                 # line ends with "successful"
+
+^(file.+)\.pdf$                             # file_record_transcript.pdf |  file_07241999.pdf
+                                            # NOT: testfile_fake.pdf.tmp
+
+()                                          # capture group
+^(file.+)\.pdf                              # captures "file_record_transcript" from "file_record_transcript.pdf"
+(\w+ (\d+))                                 # capture subgroup: Jan 1987 = (Jan 1987)(1987)
+
+(abc|xyz)                                   # match either of "abc" or "xyz"
+                                            # I love (cats|dogs)
+
+...\.
