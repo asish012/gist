@@ -203,5 +203,6 @@ ctrl-w=                         # make all windows equal size
 Help:   http://www.viemu.com/a_vi_vim_graphical_cheat_sheet_tutorial.html
 Help:   http://vim.wikia.com/wiki/Search_and_replace
 Help:   http://vimregex.com/
+Help:   http://www.grymoire.com/Unix/Sed.html
 
 ====================================================================|
