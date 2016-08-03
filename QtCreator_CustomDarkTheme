@@ -1,0 +1,13 @@
+Copy the default Dark theme, give it a name and make these following changes in Text Editor's "Font & Colors" section:
+
+primitive type  : #efe97d
+keyword         : #e08c47
+type/enumeration: #83bdcf
+function        : #f6f080   BOLD
+virtual function: #f6f080   BOLD Italic
+local/field     : #dedede
+string          : #899096
+preprocessor    : #96f5cb
+comment         : #575d61
+occurances      : #999999
+current line num: #ffffff
