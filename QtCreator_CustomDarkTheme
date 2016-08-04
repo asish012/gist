@@ -1,5 +1,6 @@
 Copy the default Dark theme, give it a name and make these following changes in Text Editor's "Font & Colors" section:
 
+font            : Courier
 primitive type  : #efe97d
 keyword         : #e08c47
 type/enumeration: #83bdcf
