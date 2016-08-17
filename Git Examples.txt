@@ -1,0 +1,122 @@
+# Add this line in your ~/.gitconfig file to see Graphical Tree-like git log # # usage: git glog #or# git glog -25 #
+glog = log --graph --pretty=format:'%C(yellow)%h%Creset -%C(cyan)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=short -12
+
+git config --global alias.co checkout
+git config --global alias.br branch
+git config --global alias.ci commit
+git config --global alias.st status
+
+git log
+git glog
+git log source/kit/entry/src/EntQueuing.cpp
+
+git merge origin release/0
+
+git pull origin release/0
+
+git origin
+
+git remote show origin
+git config --get remote.origin.url
+
+git checkout -b <new branch name>
+
+git show --pretty="format:" --name-only bd61ad98
+
+git show <commit>                       # Show changes of particular commit
+git show 13fc298ebbd08e917127243506095d6130a0e5be  source/kit/entry/src/EntQueuing.cpp
+
+git diff origin/master
+git diff 0da94be  59ff30c               # Diff between commits
+git diff HEAD~                          # See diff of last commit
+git diff --staged                       # See diff of staged changes
+git diff -r 13fc298ebbd08e917127243506095d6130a0e5be  source/kit/entry/src/EntQueuing.cpp
+
+git cherry-pick cf975b3c5375287e4ee478b6b58492a05b3d9c6d
+
+git push origin branch_name
+
+##### STASH #####
+git stash save [<name>]                 # Discard unstaged changes and save that in stash
+git stash list                          #
+git stash drop                          # Delete all stashes
+git stash drop [<name>]                 # Delete particular stash
+git stash apply [<name>]                # Apply stashed changes (doesn't remove the stash)
+git stash pop [<name>]                  # Apply changes and drop the stash
+git stash branch <branchname> [<stash_name>]          # creates and checks out a new branch at which the <stash_name> was originally created
+git stash -u                            # stash all local changes
+
+git checkout -- .                       # Discard all changes
+git checkout path/to/file/to/revert     # Discard changes from particular file
+
+git checkout -b feature_branch_name
+... edit files, add and commit ...
+git push -u origin feature_branch_name
+
+##### BRANCH #####
+git branch [--list | -l]                #
+git branch <br_name>                    #
+
+git checkout -b <br_name>               # Create new branch and checkout to that [with existing changes (if any)]
+
+git branch -d <branch_name>             # Delete local branch
+git push origin --delete <branch_name>  # Delete remote branch
+
+git branch -u upstream/foo              # Make an existing Git branch track a remote branch
+
+git merge <br_name>                     # Marge other branch with your current brunch
+
+git checkout -b feature/new_web_service # New local branch: feature/new_web_service
+git pull origin release/1               # pull from origin/release/1
+
+git pull https://<>/git/aml/msx.git release/1       # pull particular branch
+
+git pull --rebase                       # [NEW FRIEND] Set your base to the latest, and add your local committed changes on top of that.
+                                        # It's as if: Stash your unpushed commits -> Pull latest -> Apply the local commit
+
+##### ADD #####
+git add -A                              # Add all un added files
+git add -An                             #
+git add .                               # Add changes from current directory only
+
+
+##### Rewrite History #####
+git commit --amend                      # Change most recent commit msg
+git push --force <repository> <branch>  # Be careful
+git push --force-with-lease <repository> <branch>   # Safer than --force, because it may overwrite remote changes made by others
+
+
+
+git fetch https://<>/git/~abiswas/msx.git release/0
+
+git checkout release/0
+
+git merge FETCH_HEAD
+
+git commit
+
+git push https://<>/git/aml/msx.git HEAD
+
+
+git --help
+add        Add file contents to the index
+bisect     Find by binary search the change that introduced a bug
+branch     List, create, or delete branches
+checkout   Checkout a branch or paths to the working tree
+clone      Clone a repository into a new directory
+commit     Record changes to the repository
+diff       Show changes between commits, commit and working tree, etc
+fetch      Download objects and refs from another repository
+grep       Print lines matching a pattern
+init       Create an empty Git repository or reinitialize an existing one
+log        Show commit logs
+merge      Join two or more development histories together
+mv         Move or rename a file, a directory, or a symlink
+pull       Fetch from and merge with another repository or a local branch
+push       Update remote refs along with associated objects
+rebase     Forward-port local commits to the updated upstream head
+reset      Reset current HEAD to the specified state
+rm         Remove files from the working tree and from the index
+show       Show various types of objects
+status     Show the working tree status
+tag        Create, list, delete or verify a tag object signed with GPG
