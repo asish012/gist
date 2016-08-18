@@ -1,0 +1,399 @@
+# Simple thread
+
+    #include <iostream>
+    #include <thread>
+
+    void function() {
+        std::cout << "Hello thread\n";
+    }
+
+    int main() {
+        std::thread t(function);    // create thread t. if function takes parameters,
+                                    // we have to provide them in thread constructor
+                                    // eg: std::thread t(function, 5)
+                                    // if function would take one integer parameter
+
+        t.join();                   // main waits thread t to finish.
+                                    // may crash if "t" isn't join-able
+
+        return 0;
+    }
+
+    // We can either join or detach a thread, and we can do it once. Trying to join an already joined thread throws.
+    // Join a thread in order to synchronize the process.
+    // Detach a thread in case you want to create a Daemon process, who will run freely.
+    // In that case c++ runtime library will be responsible to reclaim the resources of t.
+    // Some daemon process will die only if the system is turned off.
+
+
+# Thread management
+
+    // If a thread object is destroyed (through destructor or whatever) before join or detach, then the program terminates.
+    // To make sure each thread object gets joined/detached we could use wrapper class  (uses RAII)
+
+    // A thread can be created with any callable object, like function, functor or lambda function.
+
+    // A thread object's parameters are always passed by value. If we need to pass parameters as reference: use std::ref() or std::move().
+
+    // A thread object can't be copied, can only be moved.
+        std::thread t(function)
+        std::thread t2 = t;             // not valid
+        std::thread t2 = std::move(t);  // valid
+        t2.join();                      // t is empty now
+
+    // To get thread's ID: std::this_thread::get_id()
+    // To get child thread id: t.get_id();
+
+    // If you create more threads than the number of processor-cores that is called Over-subscription.
+    // To know how many threads can be used truly: std::thread::hardware_concurrency
+
+
+# Data Race and Mutex
+
+    // Race condition: Outcome of a program is dependent on relative execution order of one or more threads (typically with shared resources)
+    // To synchronize access to the shared resources we can use Mutex
+
+    #include <mutex>
+
+    std::mutex mu;
+
+    void shared_print(std::string const& msg, int id) {
+        mu.lock();
+        std::cout << msg << ' ' << id << std::endl;     // allowing synchronized access to
+                                                        // the shared resource std::cout
+                                                        // among thread_function and main
+        mu.unlock();
+    }
+
+    void thread_function() {
+        shared_print( "Hello From Thread", std::this_thread::get_id() );
+    }
+
+    int main() {
+        std::thread t(thread_funtion);
+
+        shared_print( "Hello From Main", std::this_thread::get_id() );
+
+        t.join();
+
+        return 0;
+    }
+
+    // Here in shared_print function if std::cout throws exception then mutex wont be unlocked. which is bad.
+    // In order to ensure that whatever happens in there mutex gets unlocked, we can take advantage of RAII wrapper, and
+    // instead of using mutex-lock and mutex-unlock we could use std::lock_guard (RAII wrapper around std::mutex)
+        std::mutex_guard<std::mutex> guard(mu);
+        std::cout << msg << ' ' << id << std::endl;
+    // when mutex_guard will go out of scope, it will automatically unlock the mutex.
+    // This example is not 100% thread safe because std::cout is shared among other threads and processes.
+    // It would be more appropriate to use file writing example instead.
+
+        class LogFile {
+        private:
+            std::mutex _mu;
+            ofstream _f;
+
+        public:
+            LogFile() { _f.open("log.txt"); }
+            ~LogFile() { _f.close(); }
+
+            void shared_print(std::string const& msg, int id) {
+                std::lock_guard<std::mutex>(_mu);
+                _f << msg << ' ' << id;
+            }
+        };
+
+
+    // How to avoid Data-Race:
+    //// Use mutex to synchronize data access. using mutex-guard is even better.
+    //// Never leak a handle of data to outside
+    //// Design an Interface appropriately
+
+
+# Deadlock
+
+    // When the order of mutex-locking is not respected among different threads we may reach a situation where
+    // one thread is waiting for other thread to unlock the shared resource, where the other thread is waiting
+    // for the first thread to release his locked resources.
+
+    // To avoid Deadlock we should ensure that all the threads lock and unlock mutex in the same order.
+    // In order to ensure that we can use: std::lock(). It can lock arbitrary number of lockable objects
+    // with smart deadlock avoidance algorithms.
+        std::lock(mu, mu2);
+        std::lock_guard<std::mutex> locker1(mu, std::adopt_lock);
+        std::lock_guard<std::mutex> locker2(mu2, std::adopt_lock);
+    // std::adopt_lock tells the guard that mutex is already locked and you should adopt to the ownership of the mutex,
+    // so that when you go out of scope you should unlock the mutex.
+    // no need to call std::unlock or something like that. std::lock_guard will handle it with RAII.
+
+
+    // How to avoid Deadlock:
+    //// Try to use one mutex at a time. Evaluate your situation if you really need more than one mutex at a time.
+    //// may be you could use one mutex after another.
+
+    //// Try not to call a user function after using one mutex. Because that user function might lock another mutex
+
+    //// If you really really need multiple mutex at a time, use std::lock() to ensure mutex order and also have deadlock avoidance algo.
+    //// Or maintain total manual same order of locking and unlocking in all of your threads.
+
+
+# Unique Lock and lazy Lock
+
+    // Unique-lock: There is a third way to lock and unlock mutexes. Which is: std::unique_lock
+    // std::unique_lock is more flexible than std::lock_guard.
+    //// we can defer locking while creating unique_lock object: std::unique_lock<std::mutex> locker(_mu, std::defer_lock)
+    //// we can unlock manually and lock again if we want to. which we can't do with std::lock_guard.
+    //// we can move the unique_lock (however we can't copy neither unique_lock nor lock_guard)
+    // Remember: std::unique_lock is a bit heavy than std::lock_guard. so if performance is what you are looking for, then
+    // prefer std::lock_guard
+
+
+    // Lazy-lock: Locking and unlocking for nothing (kind of)
+    // If we think about our LogFile constructor, if we never call shared_print then we open a file for nothing.
+    // so lets refactor:
+
+        LogFile() { }
+        void shared_print(std::string const& msg, int id) {
+            {
+                std::unique_lock<std::mutex> locker2(_mu_open_file);
+                if ( not _f.is_open() ) _f.open("log.txt");
+            }
+            std::unique_lock<std::mutex> locker(_mu);
+            _f << msg << ' ' << id;
+        }
+
+    // It is thread safe, and the file is opened once only if we try to write log. BUT...
+    // we lock and unlock mutex _mu_open_file every-time someone calls shared_print(). this is called LAZY_LOCK.
+    // to handle this kind of situation particularly, std lib has: std::call_once( <FLAG>, <std::function> )
+    // lets refactor again:
+
+        class LogFile {
+        private:
+            std::mutex _mu;
+            std::once_flag _flag_fileopen;
+            ofstream _f;
+
+        public:
+            void shared_print(std::string const& msg, int id) {
+                std::call_once(_flag_fileopen, [&](){ _f.open("log.txt"); });
+
+                std::unique_lock<std::mutex> lock(_mu);
+                _f << msg << ' ' << id;
+            }
+        };
+
+
+# Condition Variables :: Notify other thread / Synchronize execution sequence
+    # Another synchronization problem, mutex alone can't solve in this situation
+
+    std::mutex mu;
+    std::condition_variable condition;
+    std::deque<int> q;
+
+    // this function enqueues an integer into the dequeue
+    void function_thread1() {
+        int count = 10;
+        while (count > 0) {
+            std::unique_lock<std::mutex> locker(mu);
+            q.push_front(count);
+            locker.unlock();
+            condition.notify_one();     // Notify one waiting thread (if there is one)
+            std::this_thread::sleep_for(chrono::seconds(1));
+            --count;
+        }
+    }
+
+    // if there is at least one integer in the dequeue, this function pops from back.
+    void function_thread2() {
+        int data = 0;
+        while ( data != 1 ) {
+            std::unique_lock<std::mutex> locker(mu);
+            condition.wait(locker);     // condition variable requires a parameter because:
+                                        // a thread should not sleep after locking,
+                                        // here it unlocks the locker, goes to sleep and
+                                        // once the wait is over it locks the locker again.
+            data = q.back();
+            q.pop_back();
+            locker.unlock();
+            std::cout << "thread2 got " << data << " from thread1";
+        }
+    }
+
+    // Since we have to lock and unlock our mutex multiple times, we can't use std::lock_guard, we have to use std::unique_lock for condition variable.
+    // At this stage thread2 can be awaken by thread1's notify_one() (through condition variable)
+
+    // If thread2 wakes up by itself we need to put it in sleep again.
+    // We could do it by passing a lambda function as parameter in condition's wait() function.
+        condition.wait(locker, [](){ return not q.empty(); })
+    // Here if thread2 wakes up and finds the queue is empty it will go back to sleep again.
+
+
+    // Here our condition variable is notifying only one thread. If we have more than one thread in await state and we need to notify all, we have to do:
+        condition.notify_all();
+
+
+# Future, Promise and async()
+
+    // Future: talking between child and parent threads, instead of using shared variable, mutex and condition variable.
+    // To use this awesome feature of standard library, we have to use std::async instead of std::thread to achieve multi-threading.
+    // std::thread is a class, where std::async is a function, who returns std::future.
+    // std::future is a channel, through this channel we can get the future value from a function's return value
+        std::future<int> fu = std::async(factorial, 5);
+        int x = fu.get();
+
+    // Lets have an example with a threaded factorial function
+    // with std::thread
+
+        std::mutex mu;
+        void factorial(int N, int& result) {
+            int res = 1;
+            for (int i = N; i > 1; --i) {
+                res *= i;
+            }
+            std::lock_guard<std::mutex> guard(mu)
+            result = res;
+        }
+
+        int main() {
+            int result;
+            std::thread t(factorial, 5, std::ref(result));
+            t.join();
+
+            return 0;
+        }
+
+    // with std::async
+
+        #include <future>
+
+        int factorial(int N) {
+            int result = 1;
+            for (int i = N; i > 1; --i) {
+                result *= i;
+            }
+            return result;
+        }
+
+        int main() {
+            std::furure<int> future = std::async(factorial, 5);
+            int result = future.get();
+        }
+
+    // our code becomes much cleaner and less hectic. we don't have to think about mutex, lock_guard, global variables and so on.
+    // future.get() function actually waits until the child thread finish and return the value from child thread.
+    // Remember: we can call future.get() function only once. multiple call of get() function crashes.
+
+    // In Depth: std::async() doesn't create new thread all the time. it depends on another parameter. we could ask async() to create
+    // a new thread or we could ask not to create new thread. the default behavior is implementation dependent.
+        std::future<int> fu = std::async(std::launch::deferred, factorial, 5);
+    // this will not create a thread and factorial function will be called once fu.get() is called.
+    // on the other hand:
+        std::future<int> fu = std::async(std::launch::async, factorial, 5);
+    // this will create a new thread all the time.
+    // default behavior is:
+        std::future<int> fu = std::async(std::launch::async | std::launch::deferred, factorial, 5);
+
+
+    // We can also pass value from Parent thread to Child thread, not at child creation time but in future.
+    // That is done by combining std::future and std::promise.
+    // It is like: Parent thread is telling Child that I Promise that I'll send you a value in Future.
+    // Here in the following example: our main() promises to its child thread (factorial) that in future it will tell what value's factorial it should calculate
+
+        int factorial(std::future<int>& fu) {
+            int res = 1;
+
+            int N = fu.get();
+            for (int i = N; i > 1; --i) {
+                res *= i;
+            }
+
+            return res;
+        }
+
+        int main() {
+            int result;
+
+            std::promise<int> promise;
+            std::future<int> future = promise.get_future();
+
+            std::future<int> fu = std::async(factorial, std::ref(future));
+
+            // Do Something. may be sleep.
+            std::this_thread::sleep_for(chrono::milliseconds(20));
+            promise.set_value(5);
+
+            result = fu.get();
+            std::cout << "Result: " << result;
+        }
+
+        // Remember: Neither future nor promise can be copied, and only be moved.
+
+
+    // If we need to do the same operation over and over, we would need multiple futures to pass to our factorial function.
+        std::future<int> fu1 = std::async(factorial, std::ref(future1));
+        std::future<int> fu2 = std::async(factorial, std::ref(future2));
+        std::future<int> fu3 = std::async(factorial, std::ref(future3));
+    // and set their promises and so on.
+    // To help in this kind of situation, std has std::shared_future. one shared_future can be shared among multiple threads,
+    // and once the promise is set, that value is shared among all the shared_futures
+        std::shared_future sf = p.get_future().share();
+
+        std::future<int> fu1 = std::async(factorial, sf);
+        std::future<int> fu2 = std::async(factorial, sf);
+        std::future<int> fu3 = std::async(factorial, sf);
+        // shared_future can be copied so we don't need to pass it as reference.
+
+    // Shared_future is good for broadcast kind of model.
+
+
+# Callable Objects
+
+
+# Packaged Task
+
+    // Bundles together a bunch of statements or function, after that executes them.
+
+    std::packaged_task<int(int)> pt = t(factorial);
+    // package takes a function signature as template argument
+
+
+# Review and Time Constrain
+
+    /* Thread */
+    std::thread t(factorial, 6);
+    std::this_thread::sleep_for( chrono::milliseconds(3) );
+    chrono::steady_clock::time_point tp = chrono::steady_clock::now() + chrono::miliseconds(5);
+    std::this_thread::sleep_until(tp);
+
+    /* Mutex */
+    std::mutex mu;
+    std::lock_guard<std::mutex> locker(mu);
+    std::unique_lock<std::mutex> ulocker(mu);
+    ulocker.lock();
+    ulocker.unlock();
+    ulocker.try_lock();
+    ulocker.try_lock_for(chrono::nanoseconds(500));
+    ulocker.try_lock_until(tp);
+
+    /* Condition Variable */
+    std::condition_variable condition;
+    condition.wait(ulocker);
+    condition.notify_one();
+    condition.notify_all();
+    condition.wait_for(ulocker, chrono::microseconds(2));
+    condition.wait_until(ulocker, tp);
+
+    /* Future and Promise */
+    std::promise<int> p;
+    std::future<int> fu = p.get_future();
+    f.get();
+    f.wait();
+    f.wait_for(chrono::milliseconds(2));
+    f.wait_until(tp);
+
+    /* Packaged Task */
+    std::packaged_task<int(int)> pt = t(factorial);
+    pt(6);
+    std::packaged_task<int()> pt = t(std::bind(factorial, 6));
+    pt();
+    int res = pt.get_future().get();
