@@ -1,0 +1,44 @@
+# Uniform Initialization : 3 ways of initialization
+  # Initializer_list initialization :
+      std::vector<int> vec { 1, 2, 3, 4 };
+      std::vector<int> vec = { 1, 2, 3, 4 };
+
+  # Aggregate initialization        :
+      class foo {
+      public:
+        int x;
+        std::string s;
+      };
+
+      foo f { 10, "boo" };
+
+  # Regular constructor initialization
+      class foo {
+      private:
+        int _x;
+        std::string _s;
+      public:
+        foo(int x, std::string s) : _x(x), _s(s) { }
+      };
+
+      foo f { 10, "boo" };
+
+  // Uniform initialization priority order :
+     1. Initializer_list constructor
+     2. Regular constructor that takes the appropriate parameters.
+     3. Aggregate initializer
+
+     Example:
+
+     dog d{3};                                    // create dog object
+
+     class dog {
+     public:
+       int age;                                     // 3rd choice
+
+       dog(int a) : age(a) {}                       // 2nd choice
+
+       dog(const initializer_list<int>& vec) {      // 1st choice
+         age = *(vec.gegin());
+       }
+     };

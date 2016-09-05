@@ -1,0 +1,86 @@
+==========================
+=== Socket Programming ===
+==========================
+
+--- Story ---
+At first, server creates a socket_descriptor and asks operating system to host him with a address and port number along with the socket_descriptor which he just created. He does this with ::bind() system call.
+
+Then, the server goes in waiting state untill some client wants to communicate. At this point the server asks the operating system to give him a socket_descriptor through which he can send & receive data to & from the client. This socket_descriptor works as a pipe.
+
+On the otherhand, a client asks the operating system, says here is an ip-address and a port, give me a socket_descriptor through which I can talk to the server. Here again this socket_descriptor works as a pipe. Thus we get two socket_descriptors (pipes) passing through a single ip-address & port.
+
+==========================
+
+struct sockaddr_in {
+    sa_family_t     sin_family; /* address family: AF_INET */
+    in_port_t       sin_port;   /* port in network byte order */
+    struct in_addr  sin_addr;   /* internet address */
+};
+--------------------------
+
+struct in_addr {
+    uint32_t        s_addr;     /* address in network byte order */
+};
+==========================
+
+# Server setup steps
+    - Step 1
+        Create a socket. By calling ::socket(AF_INET, SOCK_STREAM, 0) and get a socket descriptor.
+
+    - Step 2.1
+        Fill sockaddr_in 's attributes
+
+            struct sockaddr_in {
+                sa_family_t     sin_family;         // AF_INET
+                in_port_t       sin_port;           // htons(int)
+                struct in_addr  sin_addr;           // inet_pton(AF_INET, "localhost", &(myaddress.sin_addr))
+            };
+
+    - Step 2.2
+        Bind. Bind our socket descriptor with socketaddr_in structure.
+
+            ::bind(socket_descriptor, (struct sockaddr*)&address, sizeof(address))
+
+    - Step 3
+        Start listening on the socket_descriptor. call ::listen(socket_descriptor, connection_pool_size) to start to listen.
+
+    - Step 4
+        Start accepting. call ::accept() with server socket_descriptor and provide an empty socketaddr_in structure.
+        In this empty socketaddr_in structure we'll get the client who would like to communicate.
+        Once we have our clients address, we can start to send & receive data to & from our client through our socket descriptor.
+
+# Client setup steps
+    - Step 1
+        Create a client socket.
+
+    - Step 2
+        Try to connect to the server and also provide your (clients) socket_descriptor to the server. To do so, call ::connect()
+        To call ::connect() we need to know server socket address (sockaddr_in). and this sockaddr_in structure requires ip-address.
+        We might need to call ::resolveHostName(resolveHostName(server.c_str(), &(address.sin_addr)) and
+        ::inet_pton(AF_INET, server.c_str(), &(address.sin_addr)) to resolve sockaddr_in.sin_addr
+
+        Once we stablish connection with server we get a socket_descriptor, and we can start writing to that or read from it.
+
+--------------------------
+
+int _sd = socket(PF_INET, SOCK_STREAM, 0);
+
+htons(port)                                     - host byte order to network byte order (hostshort) (for unsigned short integer)
+ntohs(port)                                     - network byte order to host byte order (netshort)  (for unsigned short integer)
+
+inet_pton                                       - convert IPv4 and IPv6 addresses from text to binary form (sockaddr_in.sin_addr.s_addr)
+inet_ntop                                       - converts the network address (sockaddr_in.sin_addr.s_addr) into a character string.
+
+int         inet_pton(int af, const char *src, void *dst);
+const char *inet_ntop(int af, const void *src, char *dst, socklen_t size);
+
+--------------------------
+AF = Address Family
+PF = Protocol Family
+More:
+    In some documentation, you'll see mention of a mystical "PF_INET". This is a weird etherial beast that is rarely seen in nature, but I might as well clarify it a bit here.
+    Once a long time ago, it was thought that maybe a address family (what the "AF" in "AF_INET" stands for) might support several protocols that were referenced by their protocol family (what the "PF" in "PF_INET" stands for).
+    That didn't happen. Oh well. So the correct thing to do is to use AF_INET in your struct sockaddr_in and PF_INET in your call to socket(). But practically speaking, you can use AF_INET everywhere. And, since that's what W. Richard Stevens does in his book, that's what I'll do here.
+Gist:
+    Use AF_INET in your struct sockaddr_in and PF_INET in your call to socket(). However you can use AF_INET everywhere.
+------------------------

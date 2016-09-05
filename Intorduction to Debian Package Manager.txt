@@ -1,0 +1,44 @@
+==============================
+=== Debian Package Manager ===
+==============================
+
+=== Check existing packages ===
+> sudo dpkg -l
+> sudo dpkg -l fire*                            # searching installed package name starts with "fire"
+
+=== Update & Upgrade ===
+> sudo apt-get update                           # seek for updates to all the listed source links
+> sudo apt-get upgrade                          # tells you what are the packages going be upgraded and proceeds to upgrade
+
+=== Install and Uninstall ===
+> sudo apt-get install nmap                     # install nmap
+> sudo apt-get remove nmap                      # remove nmap
+> sudo apt-get purge nmap                       # get rid of nmap and all the configuration files
+
+> sudo dpkg -i < *.deb >                        # install manually
+> sudo dpkg -I < *.deb >                        # tells what this package is all about (--info)
+> sudo dpkg --purge nmap                        # purge
+
+> sudo install <pkg-one.deb> <pkg-two.deb> -y   # this wont ask if you really want to install everytime
+
+> cat /etc/apt/sources.list                     # list of all the software repo sources
+
+> sudo dpkg -listfiles nmap                     # list of files contained within a package (installed package)
+> sudo dpkg --search < filename with path >     # to do reverse: to know which package owns this file?
+
+> sudo apt-cache search nmap                    # lists all the packages that has "nmap" in their description
+> sudo apt-cache showpkg package                # shows details of the package
+> sudo apt-cache stats                          # shows number of packages, dependencies, size, etc
+> sudo apt-cache unmet                          # shows packages with missing dependencies (may be for not updated dependencies)
+
+> sudo apt-cache depends package                # shows what packages depends on adopereader
+> sudo apt-cache rdepends package               # shows reverse dependencies (what depends on adobereader package)
+
+> sudo apt-cache pkgnames ad                    # shows package names starting with "ag"
+
+
+================
+=== aptitude ===
+================
+aptitude should be the day-to-day preffered package manager.
+aptitude is very similar to apt-get. for example, to install: aptitude install package
