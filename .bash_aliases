@@ -3,6 +3,8 @@ stty -ctlecho
 
 alias install='sudo apt-get install'
 
+alias f='find -iname'
+
 alias massif='valgrind --tool=massif --time-unit=B'
 
 # car-root toolchain
