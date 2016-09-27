@@ -1,3 +1,6 @@
+# in order to source .bash_profile/.bashrc always treat shell as a login shell
+shell -$SHELL
+
 # skip the startup message
 startup_message off
 
