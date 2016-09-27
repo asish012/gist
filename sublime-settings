@@ -1,0 +1,23 @@
+{
+	"always_show_minimap_viewport": true,
+	"close_windows_when_empty": true,
+	"copy_with_empty_selection": false,
+	"default_line_ending": "unix",
+	"highlight_modified_tabs": true,
+	"ignored_packages":
+	[
+		"Vintage"
+	],
+	"remember_full_screen": true,
+	"rulers":
+	[
+		120
+	],
+	"shift_tab_unindent": true,
+	"show_encoding": true,
+	"tab_completion": false,
+	"tab_size": 4,
+	"translate_tabs_to_spaces": true,
+	"trim_trailing_white_space_on_save": true,
+	"use_simple_full_screen": true
+}
