@@ -1,23 +1,23 @@
-@ skip the startup message
+# skip the startup message
 startup_message off
 
-@ restore bash color scheme
+# restore bash color scheme
 term xterm-color
 
-@ automatically detach on hangup.
+# automatically detach on hangup.
 autodetach on
 
-@ start with visual bell as default
+# start with visual bell as default
 vbell on
 vbell_msg "bell on %t (%n)"
 
-@ look and feel (screen tab at the bottom of the screen)
+# look and feel (screen tab at the bottom of the screen)
 caption always "%{= kw}%-Lw%{= kG}%{+b}[%n %t]%{-b}%{= kw}%+Lw%1` %= %H %d-%m-%Y %c"
 
 activity "Activity in %t(%n)"
 
-@ set default scrollback
+# set default scrollback
 defscrollback 10000
 
-@ use normal scroll wheel
+# use normal scroll wheel
 termcapinfo xterm* ti@:te@
