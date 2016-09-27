@@ -1,3 +1,9 @@
+# make sure your ~/.bashrc file contains following 3 lines (as active)
+# if [ -f ~/.bash_aliases ]; then
+#     . ~/.bash_aliases
+# fi
+
+
 # prevent echoing ^C when you press Ctrl+C
 stty -ctlecho
 
