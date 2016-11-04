@@ -1,0 +1,18 @@
+// Place your settings in this file to overwrite the default settings
+{
+// Workbench
+    // Controls where editors open. Select 'left' or 'right' to open editors to the left or right of the current active one. Select 'first' or 'last' to open editors independently from the currently active one.
+    "workbench.editor.openPositioning": "last",
+
+// Window
+    // Controls how folders are being reopened after a restart. Select 'none' to never reopen a folder, 'one' to reopen the last folder you worked on or 'all' to reopen all folders of your last session.
+    "window.reopenFolders": "all",
+
+// Files
+    // When enabled, will trim trailing whitespace when you save a file.
+    "files.trimTrailingWhitespace": true,
+
+// File Explorer
+    // Controls if the explorer should automatically reveal files when opening them.
+    "explorer.autoReveal": false
+}
