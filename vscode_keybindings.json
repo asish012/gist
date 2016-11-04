@@ -7,5 +7,6 @@
     { "key": "ctrl+shift+up",   "command": "editor.action.copyLinesUpAction",
                                 "when": "editorTextFocus" },
     { "key": "ctrl+shift+down", "command": "editor.action.copyLinesDownAction",
-                                "when": "editorTextFocus" }
+                                "when": "editorTextFocus" },
+    { "key": "ctrl+shift+r",    "command": "workbench.files.action.showActiveFileInExplorer" }
 ]
