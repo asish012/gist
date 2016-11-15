@@ -1,0 +1,6 @@
+# -Wall # This enables all the warnings about constructions that some users consider questionable
+# -Wextra #This enables some extra warning flags that are not enabled by -Wall
+# -Werror # Make all warnings into errors.
+# -Wpedantic # Issue all the warnings demanded by strict ISO C and ISO C++
+
+add_compile_options(-Wall -Wextra -Werror -Wpedantic)
