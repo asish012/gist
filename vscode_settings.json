@@ -2,6 +2,8 @@
 {
 // Editor
     "editor.rulers": [120],
+    "editor.emptySelectionClipboard": false,
+    "editor.renderWhitespace": "boundary",
 
 // Workbench
     // Controls where editors open. Select 'left' or 'right' to open editors to the left or right of the current active one. Select 'first' or 'last' to open editors independently from the currently active one.
