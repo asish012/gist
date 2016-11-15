@@ -15,3 +15,18 @@ elseif(COMPILER_SUPPORTS_CXX0X)
 else()
     message(STATUS "The compiler ${CMAKE_CXX_COMPILER} has no C++11/C++0x support. Please use a different C++ compiler.")
 endif()
+
+
+# Most Frequent Variables
+${NAME}
+${PROJECT_NAME}
+${CMAKE_PROJECT_NAME}
+
+${CMAKE_SOURCE_DIR}
+${CMAKE_BINARY_DIR}
+${CMAKE_CURRENT_SOURCE_DIR}
+${CMAKE_CURRENT_BINARY_DIR}
+${PROJECT_SOURCE_DIR}
+${PROJECT_BINARY_DIR}
+${<PROJECT-NAME>_SOURCE_DIR}
+${<PROJECT-NAME>_BINARY_DIR}
