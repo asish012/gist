@@ -52,6 +52,7 @@
 
     // Race condition: Outcome of a program is dependent on relative execution order of one or more threads (typically with shared resources)
     // To synchronize access to the shared resources we can use Mutex
+    // Mutex is like a lock (বাংলায়ঃ তালা). যখন তালা লাগানো থাকে তখন ঘরের ভিতরের জিনিষপত্র সুরক্ষিত (unaccesable by others)
 
     #include <mutex>
 
