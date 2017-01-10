@@ -1,0 +1,30 @@
+# add git branch name in prompt
+reset=$(tput sgr0)
+red=$(tput setaf 1)
+green=$(tput setaf 2)
+yellow=$(tput setaf 3)
+dark_blue=$(tput setaf 4)
+pink=$(tput setaf 5)
+cyan=$(tput setaf 6)
+
+function show_repo_type {
+  git branch > /dev/null 2> /dev/null && echo '[git]' && return
+  svn info > /dev/null 2> /dev/null && echo '[svn]' && return
+  echo ''
+}
+
+function parse_git_branch {
+  git branch --no-color 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/(\1)/'
+}
+
+function parse_git_status {
+  noupdated=`git status --porcelain 2> /dev/null | grep -E "^ (M|D)" | wc -l`
+  nocommitted=`git status --porcelain 2> /dev/null | grep -E "^(M|A|D|R|C)" | wc -l`
+
+  if [[ $noupdated -gt 0 ]]; then echo -n "*"; fi
+  if [[ $nocommitted -gt 0 ]]; then echo -n "+"; fi
+}
+
+# add git branch name in prompt
+#export PS1="[\[$green\]\u\[$reset\]@\[$yellow\]\h\[$reset\]] \[$red\]\w\[$reset$cyan\]\$(show_repo_type)\[$yellow\]\$(parse_git_branch)\$(parse_git_status)\[$reset\]: "
+export PS1="[\[$dark_blue\]\u\[$reset\]@\[$green\]\h\[$reset\]] \[$cyan\]\$(show_repo_type)\[$yellow\]\$(parse_git_branch)\$(parse_git_status) \[$reset$cyan\][\w]\[$reset\]: "
