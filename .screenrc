@@ -1,4 +1,4 @@
-# start screen's tab number from 1
+# start screen's tab number from 1. also enables 'Home' and 'End' button to navigate in terminal command
 bind c screen 1
 bind ^c screen 1
 bind 0 select 10
