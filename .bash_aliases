@@ -3,6 +3,9 @@
 #     . ~/.bash_aliases
 # fi
 
+# for screen
+# bind Ctrl-b to goto beginning of line in terminal commands
+bind '"\C-b": beginning-of-line'
 
 # prevent echoing ^C when you press Ctrl+C
 stty -ctlecho
