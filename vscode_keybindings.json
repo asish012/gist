@@ -15,6 +15,7 @@
     { "key": "ctrl+shift+up",   "command": "editor.action.copyLinesUpAction", "when": "editorTextFocus" },
     { "key": "ctrl+shift+down", "command": "editor.action.copyLinesDownAction", "when": "editorTextFocus" },
     { "key": "ctrl+shift+r",    "command": "workbench.files.action.showActiveFileInExplorer" },
+    { "key": "f4",              "command": "C_Cpp.SwitchHeaderSource", "when": "editorTextFocus" },
 
     { "key": "ctrl+shift+x ctrl+shift+i",  "command": "extension.surroundWithIf", "when": "editorTextFocus" },
     { "key": "ctrl+shift+x ctrl+shift+t",  "command": "extension.surroundWithTry", "when": "editorTextFocus" }
