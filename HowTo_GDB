@@ -1,3 +1,7 @@
+> g++ input.cpp -E input.cpp.o.E
+// This stops gcc after the preprocessing stage and generates a a huge input.cpp.o.E file containing all the symboles including symboles from the #included files
+
+
 (gdb) disassemble
 
-// If c++filt can't deliver you readable symbols trim trailing string starting @
+# If c++filt can't deliver you readable symbols trim trailing string starting @
