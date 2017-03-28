@@ -1,0 +1,3 @@
+(gdb) disassemble
+
+// If c++filt can't deliver you readable symbols trim trailing string starting @
