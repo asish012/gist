@@ -6,9 +6,19 @@ git config --global alias.br branch
 git config --global alias.ci commit
 git config --global alias.st status
 
+git config --global alias.unstage 'reset HEAD --'
+git config --global alias.lastlog 'log -1 HEAD'
+git config --global alias.ll 'log -1 HEAD'
+git config --global alias.visual '!gitk'
+
+git config --global alias.lastdiff 'diff HEAD^ HEAD'
+git config --global alias.ld 'diff HEAD^ HEAD'
+
 git log
 git glog
 git log source/kit/entry/src/EntQueuing.cpp
+
+gitk
 
 git merge origin release/0
 
