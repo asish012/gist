@@ -1,23 +1,57 @@
 // Place your settings in this file to overwrite the default settings
 {
-// Editor
-    "editor.rulers": [120],
-    "editor.emptySelectionClipboard": false,
-    "editor.renderWhitespace": "boundary",
+    // Editor
+    "editor.fontSize": 12,
+    "editor.lineHeight": 15,
+    "editor.rulers": [120],
+    "editor.emptySelectionClipboard": false,
+    "editor.renderWhitespace": "boundary",
+    "editor.minimap.enabled": true,
+    "editor.cursorStyle": "line",
+    "editor.minimap.renderCharacters": true,
 
-// Workbench
-    // Controls where editors open. Select 'left' or 'right' to open editors to the left or right of the current active one. Select 'first' or 'last' to open editors independently from the currently active one.
-    "workbench.editor.openPositioning": "last",
+    // Workbench
+    // Controls where editors open. Select 'left' or 'right' to open editors to the left or right of the current active one. Select 'first' or 'last' to open editors independently from the currently active one.
+    "workbench.editor.openPositioning": "last",
 
-// Window
-    // Controls how folders are being reopened after a restart. Select 'none' to never reopen a folder, 'one' to reopen the last folder you worked on or 'all' to reopen all folders of your last session.
-    "window.reopenFolders": "all",
+    // Window
+    // Controls how folders are being reopened after a restart. Select 'none' to never reopen a folder, 'one' to reopen the last folder you worked on or 'all' to reopen all folders of your last session.
+    "window.reopenFolders": "all",
 
-// Files
-    // When enabled, will trim trailing whitespace when you save a file.
-    "files.trimTrailingWhitespace": true,
+    // Files
+    // When enabled, will trim trailing whitespace when you save a file.
+    "files.trimTrailingWhitespace": true,
+    // When enabled, insert a final new line at the end of the file when saving it.
+    "files.insertFinalNewline": true,
 
-// File Explorer
-    // Controls if the explorer should automatically reveal files when opening them.
-    "explorer.autoReveal": false
+    "files.exclude": {
+        "**/.git": true,
+        "**/.svn": true,
+        "**/.hg": true,
+        "**/.DS_Store": true,
+        "**/.kdev4": true,
+        "**/.vscode": true
+    },
+
+    // File Explorer
+    // Controls if the explorer should automatically reveal files when opening them.
+    "explorer.autoReveal": false,
+
+    // vscode-icons configuration
+    "vsicons.dontShowNewVersionMessage": true,
+
+    // workbench configuration
+    "workbench.welcome.enabled": false,
+        "workbench.colorTheme": "One Dark",
+        "workbench.iconTheme": "vscode-icons",
+        "[cpp]": {
+            "editor.quickSuggestions": true
+        },
+        "[c]": {
+            "editor.quickSuggestions": true
+    },
+
+    // C/C++ configuration
+    "C_Cpp.intelliSenseEngine": "Default",
+    "C_Cpp.errorSquiggles": "Disabled"
 }
