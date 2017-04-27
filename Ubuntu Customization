@@ -1,0 +1,2 @@
+# Show all active windows: Re-map <Super>w to <Primary><Alt>Up. 
+dconf write /org/compiz/profiles/unity/plugins/scale/initiate-key "'<Primary><Alt>Up'"
