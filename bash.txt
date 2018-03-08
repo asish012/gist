@@ -1,0 +1,5 @@
+
+# remove all files with extension .srt
+rm -r **/*.srt
+
+find . -name "*srt" -delete
