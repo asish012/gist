@@ -3,3 +3,6 @@
 rm -r **/*.srt
 
 find . -name "*srt" -delete
+
+# find and run other command on the found result
+find . -name "*.txt" -type f -maxdepth 1 -exec chmod 775 {} +
