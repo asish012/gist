@@ -11,7 +11,6 @@
     { "key": "alt+right",       "command": "workbench.action.navigateForward" },
     { "key": "ctrl+1",          "command": "workbench.action.terminal.focus", "when": "!terminalFocus" },
     { "key": "ctrl+r",          "command": "workbench.action.gotoSymbol" },
-    { "key": "ctrl+d",          "command": "editor.action.deleteLines", "when": "editorTextFocus" },
     { "key": "ctrl+shift+up",   "command": "editor.action.copyLinesUpAction", "when": "editorTextFocus" },
     { "key": "ctrl+shift+down", "command": "editor.action.copyLinesDownAction", "when": "editorTextFocus" },
     { "key": "ctrl+shift+r",    "command": "workbench.files.action.showActiveFileInExplorer" },
@@ -20,5 +19,9 @@
     { "key": "ctrl+shift+x ctrl+shift+t",  "command": "extension.surroundWithTry", "when": "editorTextFocus" },
 
     { "key": "f4",              "command": "C_Cpp.SwitchHeaderSource", "when": "editorTextFocus" },
-    { "key": "f7",              "command": "C_Cpp.Navigate", "when": "editorTextFocus" }
+    { "key": "f7",              "command": "C_Cpp.Navigate", "when": "editorTextFocus" },
+    { "key": "ctrl+d",          "command": "editor.action.deleteLines",             "when": "textInputFocus && !editorReadonly" },
+    { "key": "ctrl+shift+k",    "command": "-editor.action.deleteLines",            "when": "textInputFocus && !editorReadonly" },
+    { "key": "ctrl+shift+k",    "command": "bookmarks.toggle",                      "when": "editorTextFocus" },
+    { "key": "ctrl+alt+k",      "command": "-bookmarks.toggle",                     "when": "editorTextFocus" }
 ]
