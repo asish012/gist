@@ -1,10 +1,21 @@
 // Place your key bindings in this file to overwrite the defaults
 [
 // Mac
-//    { "key": "cmd+`",             "command": "workbench.action.terminal.toggleTerminal" },
-//    { "key": "cmd+1",             "command": "workbench.action.terminal.focus", "when": "!terminalFocus" },
-//    { "key": "alt+cmd+left",      "command": "workbench.action.navigateBack" },
-//    { "key": "alt+cmd+right",     "command": "workbench.action.navigateForward" },
+    { "key": "cmd+`",           "command": "workbench.action.terminal.toggleTerminal" },
+    { "key": "cmd+1",           "command": "workbench.action.terminal.focus",   "when": "!terminalFocus" },
+    { "key": "cmd+r",           "command": "workbench.action.gotoSymbol" },
+    { "key": "cmd+alt+left",    "command": "workbench.action.navigateBack" },
+    { "key": "cmd+alt+right",   "command": "workbench.action.navigateForward" },
+
+    { "key": "cmd+d",           "command": "editor.action.deleteLines",         "when": "textInputFocus && !editorReadonly" },
+    { "key": "cmd+shift+k",     "command": "-editor.action.deleteLines",        "when": "textInputFocus && !editorReadonly" },
+
+    { "key": "cmd+shift+up",    "command": "editor.action.copyLinesUpAction",   "when": "editorTextFocus" },
+    { "key": "cmd+shift+down",  "command": "editor.action.copyLinesDownAction", "when": "editorTextFocus" },
+    { "key": "cmd+shift+r",     "command": "workbench.files.action.showActiveFileInExplorer" },
+
+    { "key": "shift+cmd+up",    "command": "editor.action.insertCursorAbove",   "when": "editorTextFocus" },
+    { "key": "alt+cmd+up",      "command": "-editor.action.insertCursorAbove",  "when": "editorTextFocus" },
 
 // Linux
     { "key": "alt+left",        "command": "workbench.action.navigateBack" },
