@@ -14,8 +14,8 @@
     { "key": "cmd+shift+down",  "command": "editor.action.copyLinesDownAction", "when": "editorTextFocus" },
     { "key": "cmd+shift+r",     "command": "workbench.files.action.showActiveFileInExplorer" },
 
-    { "key": "shift+cmd+up",    "command": "editor.action.insertCursorAbove",   "when": "editorTextFocus" },
-    { "key": "alt+cmd+up",      "command": "-editor.action.insertCursorAbove",  "when": "editorTextFocus" },
+    { "key": "cmd+alt+up",      "command": "editor.action.insertCursorAbove",   "when": "editorTextFocus" },
+    { "key": "cmd+alt+down",    "command": "editor.action.insertCursorBelow",   "when": "editorTextFocus" },
 
 // Linux
     { "key": "alt+left",        "command": "workbench.action.navigateBack" },
