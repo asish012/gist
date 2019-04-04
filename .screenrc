@@ -4,8 +4,10 @@ bind ^c screen 1
 bind 0 select 10
 screen 1
 
-# in order to source .bash_profile/.bashrc always treat shell as a login shell
+# in order to source .bashrc always treat shell as a login shell
 shell -$SHELL
+# Exception: In Mac you have to create a link named .bashrc to .bash_profile, because .bashrc is not present in Mac 
+# (ln -sfn .bash_profile .bashrc)
 
 # skip the startup message
 startup_message off
