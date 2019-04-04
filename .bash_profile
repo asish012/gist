@@ -1,3 +1,7 @@
+
+#   -----------------------------
+#   MAKE TERMINAL BETTER
+#   -----------------------------
 # >>> Git Branch Name Prompt >>> #
 # Color code #
 reset=$(tput sgr0)
@@ -31,9 +35,8 @@ function parse_git_status {
 export PS1="[\[$yellow\]\u\[$reset\]@\[$green\]\h\[$reset\]] \[$cyan\]\$(show_repo_type)\[$yellow\]\$(parse_git_branch)\$(parse_git_status) \[$reset$cyan\][\w]\[$reset\]: "
 # <<< Git Branch Name Prompt <<< #
 
-
 #   -----------------------------
-#   2. MAKE TERMINAL BETTER
+#   Aliases
 #   -----------------------------
 export EDITOR=/usr/bin/vim
 alias ll='ls -FGlAhp'                       # Preferred 'ls' implementation
@@ -44,15 +47,18 @@ alias ..='cd ../'                           # Go back 1 directory level
 alias ...='cd ../../'                       # Go back 2 directory levels
 alias ~="cd ~"                              # ~:            Go Home
 alias c='clear'                             # c:            Clear terminal display
-trash () { command mv "$@" ~/.Trash ; }     # trash:        Moves a file to the MacOS trash
 alias lr='ls -R | grep ":$" | sed -e '\''s/:$//'\'' -e '\''s/[^-][^\/]*\//--/g'\'' -e '\''s/^/   /'\'' -e '\''s/-/|/'\'' | less'
-
 
 alias qf="find . -iname "                    # qf:      Quickly search for file
 f () { /usr/bin/find . -iname "$@" ; }       # f:       Find file under the current directory
 fs () { /usr/bin/find . -iname "$@"'*' ; }   # fs:      Find file whose name starts with a given string
 fe () { /usr/bin/find . -iname '*'"$@" ; }   # fe:      Find file whose name ends with a given string
 
+trash () { command mv "$@" ~/.Trash ; }     # trash:        Moves a file to the MacOS trash
+
+#   -----------------------------
+#   Special functions
+#   -----------------------------
 #   extract:  Extract most know archives with one command
     extract () {
         if [ -f $1 ] ; then
@@ -74,14 +80,10 @@ fe () { /usr/bin/find . -iname '*'"$@" ; }   # fe:      Find file whose name end
              echo "'$1' is not a valid file"
          fi
     }
-#   ---------------------------------------------------------
 
-
-# BMW Proxy Shit #
-export https_proxy=http://q479070:second86@proxy.muc:8080
-export http_proxy=http://q479070:second86@proxy.muc:8080
-
-# added by Anaconda3 2018.12 installer
+#   -----------------------------
+#   Anaconda3 2018.12 installer
+#   -----------------------------
 # >>> conda init >>>
 # !! Contents within this block are managed by 'conda init' !!
 __conda_setup="$(CONDA_REPORT_ERRORS=false '/Users/q479070/anaconda3/bin/conda' shell.bash hook 2> /dev/null)"
